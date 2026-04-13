@@ -30,8 +30,11 @@ with col1:
 
     st.subheader("Existing Categories")
     for cat in categories:
+        response = requests.get(f"{BASE_URL}/categories/{cat['id']}/total")
+        total = response.json().get('total', 0)
         c_cols = st.columns([3, 1])
-        c_cols[0].write(f"{cat['name']} (ID: {cat['id']})")
+        c_cols[0].write(f"**{cat['name']}** - Spent: `{total}` USD")
+
         if c_cols[1].button("🗑️", key=f"del_cat_{cat['id']}"):
             requests.delete(f"{BASE_URL}/categories/{cat['id']}")
             st.rerun()
